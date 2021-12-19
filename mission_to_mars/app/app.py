@@ -13,7 +13,7 @@ mongo = PyMongo(app)
 
 # Create a base '/' route that will query your mongodb database and render the `index.html` template
 @app.route("/")
-def echo():
+def home():
     print('msg that shows in the terminal')
     text_to_render = "New text!"
     return render_template("index.html", headline=text_to_render)
