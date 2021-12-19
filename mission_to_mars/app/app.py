@@ -13,7 +13,7 @@ mongo = PyMongo(app)
 
 # Create a base '/' route that will query your mongodb database and render the `index.html` template
 @app.route("/")
-def home():
+def index():
     print('msg that shows in the terminal')
     text_to_render = "New text!"
     return render_template("index.html", headline=text_to_render)
@@ -26,6 +26,20 @@ def scraper():
     listing_data = scrape_mars.scrape()
     listing.update({}, listing_data, upsert=True)
     return redirect("/", code=302)
+
+# Route that will trigger the scrape function
+@app.route("/scrape")
+def scrape():
+
+    # Run the scrape function
+    costa_data = scrape_costa.scrape_info()
+
+    # Update the Mongo database using update and upsert=True
+    destination.update({}, costa_data, upsert=True)
+
+    # Redirect back to home page
+    return redirect("/")
+
 
 # Run your app
 if __name__ == "__main__":
