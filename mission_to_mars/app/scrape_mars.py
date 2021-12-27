@@ -1,11 +1,14 @@
 from splinter import Browser
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup as bs
+import pandas as pd
+import time
 
-# Define a function called `scrape` that will execute all of your scraping code from the `mission_to_mars.ipynb` notebook and return one Python dictionary containing all of the scraped data. 
 def init_browser():
     executable_path = {'executable_path': ChromeDriverManager().install()}
     return Browser('chrome', **executable_path, headless=False) 
+
+# Define a function called `scrape` that will execute all of your scraping code from the `mission_to_mars.ipynb` notebook and return one Python dictionary containing all of the scraped data. 
 
 def scrape():
     browser = init_browser()
