@@ -9,6 +9,55 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-    
+    <div class="container-fluid">
+        <div class="jumbotron text-center border-bottom" id="Page_1">
+          <h1>Mission to Mars</h1>
+          <p>
+              <a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a>
+          </p>
+        </div>
+         <!-- Latest Mars news -->
+        <div class="row">
+          <div class="col-md-12">
+              <div class="mars_fact">
+                  <h2>Latest Mars News</h2>
+                  <p class="mars_title">
+                      <h3>{{mars_info.mars_news['news_title']}}</h3>
+                  </p>
+                  <p class="mars_paragraph">
+                      {{mars_info.mars_news['nasa_paragraph']}}
+                  </p>
+              </div>
+          </div>
+        </div>
+        <!-- Featured Mars images & Table-->
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Featured Mars Image</h2>
+                <img src={{ mars_info['relative_image'] }} title="Featured Mars Images" width="100%">
+            </div>
+
+         <div class="col-md-4">
+            {{ mars_info['mars_html_table'] | safe }}
+        </div>
+    </div>
+
+        <!-- Hemispheres -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Mars Hemispheres</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for hemisphere in mars_info['hemispheres'] %}
+                <div class="col-md-6">
+                    <img src={{ hemispheres['img_url'] }} title="Mars Hemispheres" width="100%"><br>
+                    <h3>{{ hemispheres['title'] }}</h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </body>
 </html>

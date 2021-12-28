@@ -10,37 +10,109 @@ def init_browser():
 
 # Define a function called `scrape` that will execute all of your scraping code from the `mission_to_mars.ipynb` notebook and return one Python dictionary containing all of the scraped data. 
 
-def scrape():
+def nasa_mars_news():
     browser = init_browser()
-    listing = {}
-    zip_code = 92614
-    min_price = 800
-    max_price = 2000
 
-    url = f"https://losangeles.craigslist.org/search/hhh?postal={zip_code}&max_price={max_price}&min_price={min_price}&availabilityMode=0"
-    browser.visit(url)
+    nasa_url = "https://mars.nasa.gov/news/"
+    browser.visit(nasa_url)
 
     # Scrape page into Soup
     html = browser.html
     soup = bs(html, "html.parser")
 
-    listing["headline"] = soup.find("a", class_="result-title").get_text()
-    listing["price"] = soup.find("span", class_="result-price").get_text()
-    listing["hood"] = soup.find("span", class_="result-hood").get_text()
-    listing["url"] = soup.find("a", class_="result-title")["href"]
+    # latest news as of December 20, 2021
+    latest_news = soup.find('li', class_='slide')
+    news_title = latest_news.find('div', class_='content_title').text
 
-    # Store data in a dictionary
-    costa_data = {"sloth_img": sloth_img, "min_temp": min_temp, "max_temp": max_temp}
+    # .find() the paragraph text
+    nasa_paragraph = latest_news.find('div', class_='article_teaser_body').text
+
+    mars_news = { 'news_title': news_title, 'nasa_paragraph': nasa_paragraph}
+
+    return mars_news
+
+def jpl_images():
+    browser = init_browser()
     
-    # Close the browser after scraping
-    browser.quit()
+    jpl_url = "https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html"
+    browser.visit(jpl_url)
 
-    # Return results
-    return costa_data
+    image_btn = browser.links.find_by_partial_text('FULL IMAGE').click()
 
-    return listing
+    html = browser.html
+    soup = bs(html, 'html.parser')
 
+    relative_image = soup.find('img', class_='headerimage fade-in')['src']
+    featured_image_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/'+relative_image
 
+    return featured_image_url
+
+def mars_facts():
+    browser = init_browser()
+
+    mars_url = 'https://space-facts.com/mars/'
+    mars_df = pd.read_html(mars_url)[0]
+    mars_df.columns=['description', 'value']
+    mars_df.set_index('description', inplace=True)
+    mars_html_table = mars_df.to_html(justify='left')
+    mars_html_table = mars_html_table.replace('\n', '')
+
+    return mars_html_table
+
+def hemispheres():
+    browser = init_browser()
+
+    hemis_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(hemis_url)
+
+    html = browser.html
+    soup = bs(html, 'html.parser')
+
+    mars_data = soup.find_all("div", class_="item")
+
+    hemisphere_image_urls = []
+
+    mars_links = browser.find_by_css('a.prduct-item img')
+
+    for i in range(len(mars_data)):
+    
+    #python dictionary to store the data
+        hemispheres = {}
+    
+    # We have to find the elements on each loop to avoid a stale element exception
+        browser.find_by_css('a.product-item img')[i].click()
+    
+    # Next, we find the Sample image anchor tag and extract the href
+        sample_img = browser.links.find_by_text('Sample').first
+        hemispheres['img_url'] = sample_img['href']
+    
+    #html = browser.html
+    #soup = BeautifulSoup(html, 'html.parser')
+    
+    # Get Hemisphere title
+        hemispheres['title'] = browser.find_by_css('h2.title').text
+    
+    # Append hemisphere object to list
+        hemisphere_image_urls.append(hemispheres)
+    
+    # Finally, we navigate backwards with browser.back()
+        browser.back()
+
+    return hemisphere_image_urls
+
+def scrape():
+    mars_dict = {
+        'mars_news': nasa_mars_news(),
+        'mars_featured_image': jpl_images(),
+        'mars_facts': mars_facts(),
+        'mars_hemispheres': hemispheres()
+    }
+
+    return mars_dict
+
+# Run your app
+if __name__ == "__main__":
+    print(scrape())
 
 # It will be a good idea to create multiple smaller functions that are called by the `scrape()` function. 
 # Remember, each function should have one 'job' (eg. you might have a `mars_news()` function that scrapes the NASA mars news site and returns the content as a list/tuple/dictionary/json)
