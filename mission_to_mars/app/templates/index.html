@@ -52,10 +52,10 @@
         </div>
 
         <div class="row">
-            {% for hemisphere_image_urls in mars_info.hemisphere_image_urls %}
+            {% for hemispheres in mars_info.hemisphere_image_urls %}
                 <div class="col-md-6">
-                    <img src={{ mars_info['hemisphere_image_urls'] }} title="Mars Hemispheres" width="100%"><br>
-                    <h3>{{ mars_info['title'] | safe }}</h3>
+                    <img src={{ hemispheres.img_url }} title="Mars Hemispheres" width="100%"><br>
+                    <h3>{{ hemispheres.title | safe }}</h3>
                 </div>
             {% endfor %}
         </div>
