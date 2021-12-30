@@ -22,7 +22,7 @@
               <div class="mars_fact">
                   <h2>Latest Mars News</h2>
                   <p class="mars_title">
-                      <h3>{{mars_info.news_title}}</h3>
+                      <h4>{{mars_info.news_title}}</h4>
                   </p>
                   <p class="mars_paragraph">
                       {{mars_info.nasa_paragraph}}
@@ -52,10 +52,10 @@
         </div>
 
         <div class="row">
-            {% for hemisphere in mars_info['hemispheres'] %}
+            {% for hemisphere_image_urls in mars_info.hemisphere_image_urls %}
                 <div class="col-md-6">
                     <img src={{ mars_info['hemisphere_image_urls'] }} title="Mars Hemispheres" width="100%"><br>
-                    <h3>{{ mars_info.hemispheres }}</h3>
+                    <h3>{{ mars_info['title'] | safe }}</h3>
                 </div>
             {% endfor %}
         </div>
