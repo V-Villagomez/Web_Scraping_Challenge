@@ -25,7 +25,7 @@
                       <h3>{{mars_info.news_title}}</h3>
                   </p>
                   <p class="mars_paragraph">
-                      {{mars_info.news_paragraph}}
+                      {{mars_info.nasa_paragraph}}
                   </p>
               </div>
           </div>
@@ -55,7 +55,7 @@
             {% for hemisphere in mars_info['hemispheres'] %}
                 <div class="col-md-6">
                     <img src={{ mars_info['hemisphere_image_urls'] }} title="Mars Hemispheres" width="100%"><br>
-                    <h3>{{ hemisphere_image_urls['title'] }}</h3>
+                    <h3>{{ mars_info.hemispheres }}</h3>
                 </div>
             {% endfor %}
         </div>

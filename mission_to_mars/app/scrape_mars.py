@@ -4,14 +4,15 @@ from bs4 import BeautifulSoup as bs
 import pandas as pd
 import time
 
-def init_browser():
+#def init_browser():
+def scrape():
     executable_path = {'executable_path': ChromeDriverManager().install()}
-    return Browser('chrome', **executable_path, headless=False) 
+    browser = Browser('chrome', **executable_path, headless=False) 
 
 # Define a function called `scrape` that will execute all of your scraping code from the `mission_to_mars.ipynb` notebook and return one Python dictionary containing all of the scraped data. 
 
-def scape():
-    browser = init_browser()
+    #def scape():
+    #browser = init_browser()
 
     nasa_url = "https://mars.nasa.gov/news/"
     browser.visit(nasa_url)
@@ -116,8 +117,8 @@ def scape():
     return(mars_dict)
 
 # Run your app
-#if __name__ == "__main__":
-    #print(scrape())
+if __name__ == "__main__":
+    print(scrape())
 
 # It will be a good idea to create multiple smaller functions that are called by the `scrape()` function. 
 # Remember, each function should have one 'job' (eg. you might have a `mars_news()` function that scrapes the NASA mars news site and returns the content as a list/tuple/dictionary/json)
