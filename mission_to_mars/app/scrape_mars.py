@@ -10,7 +10,7 @@ def init_browser():
 
 # Define a function called `scrape` that will execute all of your scraping code from the `mission_to_mars.ipynb` notebook and return one Python dictionary containing all of the scraped data. 
 
-def nasa_mars_news():
+def scape():
     browser = init_browser()
 
     nasa_url = "https://mars.nasa.gov/news/"
@@ -27,12 +27,12 @@ def nasa_mars_news():
     # .find() the paragraph text
     nasa_paragraph = latest_news.find('div', class_='article_teaser_body').text
 
-    mars_news = { 'news_title': news_title, 'nasa_paragraph': nasa_paragraph}
+    # mars_news = { 'news_title': news_title, 'nasa_paragraph': nasa_paragraph } 
 
-    return mars_news
+    # return mars_news
 
-def jpl_images():
-    browser = init_browser()
+# jpl_images():
+    #browser = init_browser()
     
     jpl_url = "https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html"
     browser.visit(jpl_url)
@@ -45,22 +45,23 @@ def jpl_images():
     relative_image = soup.find('img', class_='headerimage fade-in')['src']
     featured_image_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/'+relative_image
 
-    return featured_image_url
+    # return featured_image_url
 
-def mars_facts():
-    browser = init_browser()
+# mars_facts():
+    #browser = init_browser()
 
     mars_url = 'https://space-facts.com/mars/'
+    browser.visit(mars_url)
     mars_df = pd.read_html(mars_url)[0]
     mars_df.columns=['description', 'value']
     mars_df.set_index('description', inplace=True)
     mars_html_table = mars_df.to_html(justify='left')
     mars_html_table = mars_html_table.replace('\n', '')
 
-    return mars_html_table
+    # return mars_html_table
 
-def hemispheres():
-    browser = init_browser()
+# mars hemispheres():
+    #browser = init_browser()
 
     hemis_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(hemis_url)
@@ -98,21 +99,25 @@ def hemispheres():
     # Finally, we navigate backwards with browser.back()
         browser.back()
 
-    return hemisphere_image_urls
+    # return hemisphere_image_urls
 
-def scrape():
+    # return all results in one dictionary
     mars_dict = {
-        'mars_news': nasa_mars_news(),
-        'mars_featured_image': jpl_images(),
-        'mars_facts': mars_facts(),
-        'mars_hemispheres': hemispheres()
-    }
+        'news_title': news_title, 
+        'nasa_paragraph': nasa_paragraph,
+        'featured_image_url': featured_image_url,
+        'mars_html_table': mars_html_table,
+        'hemisphere_image_urls': hemisphere_image_urls}
+    
+    # Close the browser after scraping
+    browser.quit()
 
-    return mars_dict
+    # Return results
+    return(mars_dict)
 
 # Run your app
-if __name__ == "__main__":
-    print(scrape())
+#if __name__ == "__main__":
+    #print(scrape())
 
 # It will be a good idea to create multiple smaller functions that are called by the `scrape()` function. 
 # Remember, each function should have one 'job' (eg. you might have a `mars_news()` function that scrapes the NASA mars news site and returns the content as a list/tuple/dictionary/json)

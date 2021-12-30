@@ -21,9 +21,9 @@ def index():
 # The route should redirect back to the base route '/' with a code 302.
 @app.route("/scrape")
 def scraper():
-    mars = client.db.mars
-    mars_dict = scrape_mars.scrape()
-    mars.update({}, mars_dict, upsert=True)
+    mars_info = client.db.mars
+    mars_data = scrape_mars.scrape()
+    mars_info.update({}, mars_data, upsert=True)
     return redirect("/", code=302)
 
 # Run your app
